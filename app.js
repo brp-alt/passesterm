@@ -1,9 +1,15 @@
+// ========================================
+// TEACHER ACCESS - EDIT THIS LIST
+// ========================================
+// Add or remove teacher usernames here
+const TEACHER_USERNAMES = ['teacher1', 'teacher2', 'counselor'];
+// ========================================
+
 // Data storage (in production, use a backend)
 let currentUser = null;
 let currentUserType = null;
 let currentFormId = null;
 let forms = JSON.parse(localStorage.getItem('passes_forms')) || [];
-let teachers = JSON.parse(localStorage.getItem('passes_teachers')) || ['admin', 'teacher1', 'teacher2'];
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -12,15 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadFromLocalStorage() {
     const savedForms = localStorage.getItem('passes_forms');
-    const savedTeachers = localStorage.getItem('passes_teachers');
     
     if (savedForms) forms = JSON.parse(savedForms);
-    if (savedTeachers) teachers = JSON.parse(savedTeachers);
 }
 
 function saveToLocalStorage() {
     localStorage.setItem('passes_forms', JSON.stringify(forms));
-    localStorage.setItem('passes_teachers', JSON.stringify(teachers));
 }
 
 function login() {
@@ -43,7 +46,7 @@ function login() {
     
     currentUser = username;
     
-    if (teachers.includes(username)) {
+    if (TEACHER_USERNAMES.includes(username)) {
         currentUserType = 'teacher';
         showTeacherScreen();
     } else {
