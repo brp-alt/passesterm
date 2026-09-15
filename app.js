@@ -187,7 +187,12 @@ function resetCheckInForm() {
 function selectMood(mood) {
     document.getElementById('mood').value = mood;
     document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
-    event.target.classList.add('selected');
+    // Find and highlight the clicked button
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        if (btn.getAttribute('data-mood') === mood) {
+            btn.classList.add('selected');
+        }
+    });
 }
 
 function submitCheckIn(event) {
@@ -213,7 +218,7 @@ function submitCheckIn(event) {
         mood: mood,
         helpTypes: helpTypes,
         helpDetails: helpDetails,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
         status: 'pending',
         accommodation: '',
         checkedInAt: null
@@ -322,7 +327,12 @@ function deleteOwnAccount() {
 function filterForms(status) {
     // Update filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    // Find the clicked button and mark it as active
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(status === 'pending' ? 'pending' : status === 'checked-in' ? 'checked' : 'all')) {
+            btn.classList.add('active');
+        }
+    });
     
     displayForms(status);
 }
@@ -420,7 +430,7 @@ function checkInForm() {
     if (formIndex !== -1) {
         forms[formIndex].status = 'checked-in';
         forms[formIndex].accommodation = accommodation;
-        forms[formIndex].checkedInAt = new Date();
+        forms[formIndex].checkedInAt = new Date().toISOString();
         saveToLocalStorage();
         
         closeModal();
