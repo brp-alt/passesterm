@@ -7,19 +7,35 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="screen">
-        <div class="login-container">
+    <!-- Login/Register Screen -->
+    <div id="authScreen" class="screen">
+        <div class="auth-container">
             <div class="logo-area">
                 <h1 class="logo-text">PASSES</h1>
                 <p class="logo-subtitle">Terminal Check-In System</p>
             </div>
             
-            <div class="login-form">
-                <input type="text" id="username" placeholder="Enter your username" class="input-field">
-                <input type="password" id="password" placeholder="Enter your password" class="input-field">
+            <div id="loginForm" class="auth-form">
+                <h2>Login</h2>
+                <input type="text" id="loginUsername" placeholder="Enter your username" class="input-field">
+                <input type="password" id="loginPassword" placeholder="Enter your password" class="input-field">
                 <button onclick="login()" class="btn btn-primary">Login</button>
                 <p class="error-message" id="loginError"></p>
+                <p class="switch-form">Don't have an account? <a onclick="toggleForm()">Create one</a></p>
+            </div>
+
+            <div id="registerForm" class="auth-form hidden">
+                <h2>Create Account</h2>
+                <input type="text" id="registerUsername" placeholder="Choose a username" class="input-field">
+                <input type="password" id="registerPassword" placeholder="Choose a password" class="input-field">
+                <input type="password" id="registerConfirmPassword" placeholder="Confirm password" class="input-field">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="registerTeacher">
+                    Register as Teacher
+                </label>
+                <button onclick="register()" class="btn btn-primary">Create Account</button>
+                <p class="error-message" id="registerError"></p>
+                <p class="switch-form">Already have an account? <a onclick="toggleForm()">Login</a></p>
             </div>
         </div>
     </div>
@@ -91,20 +107,30 @@
         <div class="teacher-container">
             <div class="header">
                 <h1>PASSES Management Dashboard</h1>
-                <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                <div class="header-buttons">
+                    <button onclick="showTeacherManagement()" class="btn btn-secondary">Manage Teachers</button>
+                    <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                </div>
             </div>
 
             <div class="teacher-content">
-                <div class="filters-section">
-                    <h3>Today's Check-Ins (7:15 AM - 1:58 PM)</h3>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" onclick="filterForms('pending')">Pending</button>
-                        <button class="filter-btn" onclick="filterForms('checked-in')">Checked In</button>
-                        <button class="filter-btn" onclick="filterForms('all')">All</button>
+                <div id="formsView">
+                    <div class="filters-section">
+                        <h3>Today's Check-Ins (7:15 AM - 1:58 PM)</h3>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" onclick="filterForms('pending')">Pending</button>
+                            <button class="filter-btn" onclick="filterForms('checked-in')">Checked In</button>
+                            <button class="filter-btn" onclick="filterForms('all')">All</button>
+                        </div>
                     </div>
+
+                    <div id="formsContainer" class="forms-grid"></div>
                 </div>
 
-                <div id="formsContainer" class="forms-grid"></div>
+                <div id="teacherManagementView" class="hidden">
+                    <h3>Manage Teachers</h3>
+                    <div id="teachersContainer" class="teachers-list"></div>
+                </div>
             </div>
         </div>
     </div>
