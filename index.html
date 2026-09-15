@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASSES Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen">
+        <div class="login-container">
+            <div class="logo-area">
+                <h1 class="logo-text">PASSES</h1>
+                <p class="logo-subtitle">Terminal Check-In System</p>
+            </div>
+            
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Enter your username" class="input-field">
+                <input type="password" id="password" placeholder="Enter your password" class="input-field">
+                <button onclick="login()" class="btn btn-primary">Login</button>
+                <p class="error-message" id="loginError"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Screen -->
+    <div id="studentScreen" class="screen hidden">
+        <div class="student-container">
+            <div class="header">
+                <h1>Welcome, <span id="studentName"></span></h1>
+                <button onclick="logout()" class="btn btn-secondary">Logout</button>
+            </div>
+
+            <div class="student-content">
+                <div id="checkInForm" class="form-section">
+                    <h2>Today's Check-In</h2>
+                    <form onsubmit="submitCheckIn(event)">
+                        <div class="form-group">
+                            <label>Reason for Check-In</label>
+                            <input type="text" id="reason" placeholder="e.g., Need academic support" class="input-field" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>How are you feeling?</label>
+                            <div class="mood-selector">
+                                <button type="button" class="mood-btn" data-mood="😊" onclick="selectMood('😊')">😊 Good</button>
+                                <button type="button" class="mood-btn" data-mood="😐" onclick="selectMood('😐')">😐 Okay</button>
+                                <button type="button" class="mood-btn" data-mood="😟" onclick="selectMood('😟')">😟 Stressed</button>
+                                <button type="button" class="mood-btn" data-mood="😤" onclick="selectMood('😤')">😤 Overwhelmed</button>
+                            </div>
+                            <input type="hidden" id="mood" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What help are you looking for?</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="help" value="Academic Support"> Academic Support
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="help" value="Counseling"> Counseling
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="help" value="Social/Emotional"> Social/Emotional
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="help" value="Behavior Support"> Behavior Support
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="help" value="Other"> Other
+                                </label>
+                            </div>
+                            <textarea id="helpDetails" placeholder="Additional details (optional)" class="input-field"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit Check-In</button>
+                    </form>
+                </div>
+
+                <div id="successMessage" class="success-message hidden">
+                    <h2>✓ Check-In Submitted</h2>
+                    <p>A staff member will review your information shortly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Screen -->
+    <div id="teacherScreen" class="screen hidden">
+        <div class="teacher-container">
+            <div class="header">
+                <h1>PASSES Management Dashboard</h1>
+                <button onclick="logout()" class="btn btn-secondary">Logout</button>
+            </div>
+
+            <div class="teacher-content">
+                <div class="filters-section">
+                    <h3>Today's Check-Ins (7:15 AM - 1:58 PM)</h3>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterForms('pending')">Pending</button>
+                        <button class="filter-btn" onclick="filterForms('checked-in')">Checked In</button>
+                        <button class="filter-btn" onclick="filterForms('all')">All</button>
+                    </div>
+                </div>
+
+                <div id="formsContainer" class="forms-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div id="formModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            
+            <div class="modal-header">
+                <h2 id="studentNameModal"></h2>
+                <p class="timestamp" id="checkInTime"></p>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-detail">
+                    <h4>Reason</h4>
+                    <p id="detailReason"></p>
+                </div>
+
+                <div class="form-detail">
+                    <h4>Feeling</h4>
+                    <p id="detailMood"></p>
+                </div>
+
+                <div class="form-detail">
+                    <h4>Requested Help</h4>
+                    <p id="detailHelp"></p>
+                </div>
+
+                <div class="form-detail">
+                    <h4>Additional Details</h4>
+                    <p id="detailHelpDetails"></p>
+                </div>
+            </div>
+
+            <div id="modalActions" class="modal-actions">
+                <div class="form-group">
+                    <label>Accommodation/Action</label>
+                    <input type="text" id="accommodation" placeholder="e.g., Check in with counselor" class="input-field">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="checkInForm()">Check In Student</button>
+                    <button class="btn btn-danger" onclick="endForm()">End Form</button>
+                </div>
+            </div>
+
+            <div id="checkedInInfo" class="checked-in-info hidden">
+                <h4>Accommodation Given</h4>
+                <p id="givenAccommodation"></p>
+                <button class="btn btn-danger" onclick="endForm()">Delete Form</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

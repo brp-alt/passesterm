@@ -1,0 +1,8 @@
+{
+  "teachers": [
+    "admin",
+    "teacher1",
+    "teacher2"
+  ],
+  "description": "Edit the 'teachers' array to add or remove teacher usernames. Any username in this list can login as a teacher."
+}
